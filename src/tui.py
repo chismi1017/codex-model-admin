@@ -1667,20 +1667,24 @@ def _csi_key(key: str, final: str) -> bool:
     return bool(re.fullmatch(rf"\x1b\[[0-9;?]*{re.escape(final)}", key))
 
 
+def _ss3_key(key: str, final: str) -> bool:
+    return key == f"\x1bO{final}"
+
+
 def _is_next_focus_key(key: str) -> bool:
-    return key in {"\t", "\r", "\n"} or _csi_key(key, "B")
+    return key in {"\t", "\r", "\n"} or _csi_key(key, "B") or _ss3_key(key, "B")
 
 
 def _is_previous_focus_key(key: str) -> bool:
-    return _csi_key(key, "A") or _csi_key(key, "Z")
+    return _csi_key(key, "A") or _csi_key(key, "Z") or _ss3_key(key, "A")
 
 
 def _is_right_key(key: str) -> bool:
-    return _csi_key(key, "C")
+    return _csi_key(key, "C") or _ss3_key(key, "C")
 
 
 def _is_left_key(key: str) -> bool:
-    return _csi_key(key, "D")
+    return _csi_key(key, "D") or _ss3_key(key, "D")
 
 
 def _menu_action_numbers(language: str) -> List[str]:
